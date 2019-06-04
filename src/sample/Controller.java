@@ -88,8 +88,18 @@ public class Controller {
     public void draw1OnAction(ActionEvent actionEvent) {
 
         enthalpyChart.setTitle("Wykres entalpii - 1. wariant obliczeń");
+
+        XYChart.Series seria = new XYChart.Series();
+        seria.setName("seria");
+        seria.getData().add(new XYChart.Data(String.valueOf(1970), 15));
+        seria.getData().add(new XYChart.Data(String.valueOf(1980), 25));
+        seria.getData().add(new XYChart.Data(String.valueOf(1990), 0));
+        seria.getData().add(new XYChart.Data(String.valueOf(2000), 88));
+        seria.getData().add(new XYChart.Data(String.valueOf(2012), 40));
+
         XYChart.Series series = calculations.setEnthalpySeries(1);
         series.setName("Entalpia");
+        seria.setName("Entalpia");
         enthalpyChart.getData().add(series);
     }
 

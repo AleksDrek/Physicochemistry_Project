@@ -2,12 +2,14 @@ package sample;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 
 import java.io.*;
 import java.nio.DoubleBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Calculations {
 
@@ -190,26 +192,24 @@ public class Calculations {
     public XYChart.Series setEnthalpySeries(int enthNumber)
     {
         int length = enthalpy1.length;
-        Number xAxis, yAxis;
-        ObservableList<XYChart<Double, Double>> data = FXCollections.<XYChart<Double,Double>> observableArrayList();
-
+        Double y;
+        XYChart.Series enthalpySeries = new XYChart.Series<>();
 
         if(enthNumber == 1) {
             for (int i = 0; i < length; i++) {
-                //xAxis = interpolated_temperatures[i];
-                //yAxis = enthalpy1[i];
-                //enthalpySeries.getData().add(new XYChart.Data(xAxis, yAxis));
-                data.add(new XYChart.Data<>(interpolated_temperatures[i],enthalpy1[i]));
+                y = new Double(enthalpy1[i]);
 
+                enthalpySeries.getData().add(new XYChart.Data(String.valueOf(interpolated_temperatures[i]),y));
             }
         }
         else{
             for (int i = 0; i < length; i++) {
-                //enthalpySeries.getData().add(new XYChart.Data(interpolated_temperatures[i], enthalpy2[i]));
+                y = new Double(enthalpy2[i]);
+
+                enthalpySeries.getData().add(new XYChart.Data(String.valueOf(interpolated_temperatures[i]),y));
             }
         }
 
-        XYChart.Series enthalpySeries = new XYChart.Series(data);
 
         return enthalpySeries;
     }
