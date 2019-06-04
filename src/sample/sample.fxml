@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <LineChart fx:id="enthalpyChart" layoutX="14.0" layoutY="50.0">
+        <xAxis>
+          <CategoryAxis side="BOTTOM" />
+        </xAxis>
+        <yAxis>
+          <NumberAxis side="LEFT" />
+        </yAxis>
+      </LineChart>
+      <Button fx:id="chooseDataButton" layoutX="538.0" layoutY="50.0" mnemonicParsing="false" onAction="#chooseDataOnAction" text="Pobierz dane" />
+      <Label fx:id="fileNameLabel" layoutX="656.0" layoutY="54.0" text="Nazwa pliku..." />
+      <Button fx:id="draw1Button" layoutX="538.0" layoutY="107.0" mnemonicParsing="false" onAction="#draw1OnAction" text="Rysuj 1" />
+      <Button fx:id="draw2Button" layoutX="638.0" layoutY="107.0" mnemonicParsing="false" onAction="#draw2OnAction" text="Rysuj 2" />
+      <Button fx:id="addTransformsButton" layoutX="538.0" layoutY="190.0" mnemonicParsing="false" onAction="#addTransformsOnAction" text="Dodaj przemiany" />
+      <Button layoutX="542.0" layoutY="250.0" mnemonicParsing="false" onAction="#displayResultsOnAction" text="Wyświetl wyniki" />
+   </children>
+</AnchorPane>
