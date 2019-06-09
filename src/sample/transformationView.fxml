@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="sample.TransformationViewController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane fx:id="transformationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.TransformationViewController">
+   <children>
+      <HBox fx:id="buttonsHBox" alignment="CENTER" layoutX="526.0" layoutY="449.0" prefHeight="51.0" prefWidth="174.0" spacing="20.0">
+         <children>
+            <Button fx:id="applyButton" mnemonicParsing="false" onAction="#applyButtonOnAction" text="Zatwierdź" />
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancelButtonOnAction" text="Anuluj" />
+         </children>
+      </HBox>
+   </children>
 </AnchorPane>
