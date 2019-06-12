@@ -31,10 +31,10 @@ public class Main extends Application {
         transformationViewController = transformationLoader.getController();
         transformationScene = new Scene(transformation_scene_layout);
 
-        /*FXMLLoader resultsLoader = new FXMLLoader(getClass().getResource("resultsView.fxml"));
+        FXMLLoader resultsLoader = new FXMLLoader(getClass().getResource("resultsView.fxml"));
         Parent results_scene_layout = resultsLoader.load();
         resultsViewController = resultsLoader.getController();
-        resultScene = new Scene(results_scene_layout);*/
+        resultScene = new Scene(results_scene_layout);
 
         Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
 
@@ -42,6 +42,7 @@ public class Main extends Application {
         goToFirstScene();
 
         controller.setTransformationViewController(transformationViewController);
+        controller.setResultsViewController(resultsViewController);
 
     }
 

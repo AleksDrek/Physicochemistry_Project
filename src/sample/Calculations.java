@@ -20,8 +20,19 @@ public class Calculations {
     private double[] interpolated_specific_heat;
     private double[] enthalpy1;
     private double[] enthalpy2;
+    //private double[] enthalpyMethod1;
+    //private double[] specific_heat_after_transforms;
+
+    public double[] getTransformsData() {
+        return transformsData;
+    }
 
     private double[] transformsData;
+
+
+    //serie do wykresow wynikowych
+
+    public XYChart.Series method11Series, method12Series, method13Series;
 
     public void init(double[] temp, double[] heat, int length) {
         temperatures = new double[length];
@@ -192,10 +203,8 @@ public class Calculations {
 
         if (enthNumber == 1) {
             for (int i = 0; i < length; i++) {
-                y = new Double(enthalpy1[i]);
-                x = new Double(interpolated_temperatures[i]);
 
-                enthalpySeries.getData().add(new XYChart.Data(x, y));
+                enthalpySeries.getData().add(new XYChart.Data(new Double(interpolated_temperatures[i]), new Double(enthalpy1[i])));
             }
         } else {
             for (int i = 0; i < length; i++) {
@@ -210,31 +219,125 @@ public class Calculations {
         return enthalpySeries;
     }
 
-    private void calculateMethod1(int numberOfMethods) {
-        int index1 = (int) (transformsData[0] - interpolated_temperatures[0]);
+    public void calculateMethod1(int numberOfMethods) {
+        method11Series = new XYChart.Series<>();
 
-        if (transformsData[0] == interpolated_temperatures[index1]) {
-            interpolated_specific_heat[index1] += transformsData[2];
+        double[] enthalpyMethod1 = new double[enthalpy1.length]; //czy method1, czy zawsze method, a zapisuję gdzieś indziej <do jakiegoś chart series czy cos>
+        enthalpyMethod1 = enthalpy1.clone();
+        double[] specific_heat_after_transforms = new double[interpolated_specific_heat.length]; // tutaj mozna pomyslec czy na pewno to tutaj inicjalizowac, czy jakos inaczej, zeby nie bylo bledu
+        specific_heat_after_transforms = interpolated_specific_heat.clone();
+
+        int index[] = findTempIndex(numberOfMethods);
+        int start = index[0];
+        int licznik = 0, licznik_heat = 2;
+
+        //specific_heat_after_transforms[index[0]] += transformsData[2];
+
+        for (int i = start; i < specific_heat_after_transforms.length; i++) {
+            if (i == index[licznik]) {
+                specific_heat_after_transforms[i] += transformsData[licznik_heat];
+
+                if (licznik < index.length - 2) {
+                    licznik += 2;
+                    licznik_heat += 3;
+                }
+            }
+
+            enthalpyMethod1[i] = enthalpyEquation(interpolated_temperatures[i - 1], interpolated_temperatures[i], specific_heat_after_transforms[i - 1], specific_heat_after_transforms[i], enthalpyMethod1[i - 1]);
+
+        }
+
+        for (int i = 0; i < specific_heat_after_transforms.length; i++) {
+            method11Series.getData().add(new XYChart.Data(new Double(interpolated_temperatures[i]), new Double(enthalpyMethod1[i])));
+        }
+
+    }
+
+
+    public void calculateMethod2(int numberOfMethods) {
+        method12Series = new XYChart.Series<>();
+
+        double[] enthalpyMethod1 = new double[enthalpy1.length];
+        enthalpyMethod1 = enthalpy1.clone();
+        double[] specific_heat_after_transforms = new double[interpolated_specific_heat.length];
+        specific_heat_after_transforms = interpolated_specific_heat.clone();
+
+        int index[] = findTempIndex(numberOfMethods); // tablica zawierajaca indeksy temperatur przemian w glownej tablicy
+        double diff = (interpolated_temperatures[index[1]] - interpolated_temperatures[index[0]]) / 2;
+
+        int tx = (int) (index[0] + diff); //indeks srodkowej temperatury
+        specific_heat_after_transforms[tx] += transformsData[2];
+        int licznik = 2, licznik_heat = 5;
+
+
+        for (int i = tx; i < enthalpyMethod1.length; i++) {
+
+            enthalpyMethod1[i] = enthalpyEquation(interpolated_temperatures[i - 1], interpolated_temperatures[i], specific_heat_after_transforms[i], specific_heat_after_transforms[i - 1], enthalpyMethod1[i - 1]);
+
+            if (i == index[licznik]) {
+                diff = (interpolated_temperatures[index[licznik + 1]] - interpolated_temperatures[index[licznik]]) / 2;
+                tx = (int) (index[licznik] + diff);
+                specific_heat_after_transforms[tx] += transformsData[licznik_heat];
+                if (licznik < index.length - 2) {
+                    licznik += 2;
+                    licznik_heat += 3;
+                }
+            }
+        }
+
+        for (int i = 0; i < specific_heat_after_transforms.length; i++) {
+            method12Series.getData().add(new XYChart.Data(new Double(interpolated_temperatures[i]), new Double(enthalpyMethod1[i])));
+        }
+
+    }
+
+    public void calculateMethod3(int numberOfMethods) {
+
+        method13Series = new XYChart.Series<>();
+
+        double[] enthalpyMethod1 = new double[enthalpy1.length]; //czy method1, czy zawsze method, a zapisuję gdzieś indziej <do jakiegoś chart series czy cos>
+        enthalpyMethod1 = enthalpy1.clone();
+        double[] specific_heat_after_transforms = new double[interpolated_specific_heat.length]; // tutaj mozna pomyslec czy na pewno to tutaj inicjalizowac, czy jakos inaczej, zeby nie bylo bledu
+        specific_heat_after_transforms = interpolated_specific_heat.clone();
+
+        int index[] = findTempIndex(numberOfMethods);
+        int start = index[1];
+        int licznik = 3, licznik_heat = 5;
+
+        specific_heat_after_transforms[index[1]] += transformsData[2];
+
+        for (int i = start; i < specific_heat_after_transforms.length; i++) {
+            enthalpyMethod1[i] = enthalpyEquation(interpolated_temperatures[i - 1], interpolated_temperatures[i], specific_heat_after_transforms[i - 1], specific_heat_after_transforms[i], enthalpyMethod1[i - 1]);
+            if (i == index[licznik]) {
+                specific_heat_after_transforms[i] += transformsData[licznik_heat];
+
+                if (licznik < index.length - 2) {
+                    licznik += 2;
+                    licznik_heat += 3;
+                }
+            }
+
+        }
+
+        for (int i = 0; i < specific_heat_after_transforms.length; i++) {
+            method13Series.getData().add(new XYChart.Data(new Double(interpolated_temperatures[i]), new Double(enthalpyMethod1[i])));
         }
 
 
     }
 
-    private void calculateMethod2() {
+    private int[] findTempIndex(int numberOfChanges) {
+        int indexArray[] = new int[numberOfChanges * 2];
+        int licznik = 0;
 
-    }
-
-    private void calculateMethod3() {
-
-    }
-
-    private void addTransformsChanges(int numberOfChanges) {
-        int indexArray[] = new int[numberOfChanges];
-
-        for (int i = 0; i < numberOfChanges; i++) {
-            indexArray[i] = (int)(transformsData[i*3] - interpolated_temperatures[0]);
+        for (int i = 0; i < indexArray.length; i++) {
+            if (i % 2 == 0 && i != 0)
+                licznik++;
+            indexArray[i] = (int) (transformsData[licznik] - interpolated_temperatures[0]);
+            licznik++;
         }
 
+        return indexArray;
     }
 
 

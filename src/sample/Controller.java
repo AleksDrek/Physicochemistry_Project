@@ -31,9 +31,30 @@ public class Controller {
     public NumberAxis yAxis;
     public TextField amountOfTransfers;
     private Stage stage;
+
     private static Calculations calculations;
     private  TransformationViewController transformationViewController;
     private boolean dataFileIsLoaded = false;
+
+    public ResultsViewController getResultsViewController() {
+        return resultsViewController;
+    }
+
+    public void setResultsViewController(ResultsViewController resultsViewController) {
+        this.resultsViewController = resultsViewController;
+    }
+
+    private ResultsViewController resultsViewController;
+
+    public static Calculations getCalculations() {
+        return calculations;
+    }
+
+    public static void setCalculations(Calculations calculations) {
+        Controller.calculations = calculations;
+    }
+
+
 
     public TransformationViewController getTransformationViewController() {
         return transformationViewController;
@@ -118,6 +139,7 @@ public class Controller {
             enthalpyChart.getData().clear();
 
             enthalpyChart.setTitle("Wykres entalpii - 1. wariant obliczeń");
+            enthalpyChart.setCreateSymbols(false);
 
             XYChart.Series series = calculations.setEnthalpySeries(1);
             series.setName("Entalpia");
@@ -150,17 +172,15 @@ public class Controller {
       //  transformationViewController = new TransformationViewController();
         transformationViewController.initTransformationPane(amount);
 
-        //moveToTransformationScene();
 
 
 
     }
 
-    private void moveToTransformationScene() {
-        Main.goToTransformation();
-    }
 
     public void displayResultsOnAction(ActionEvent actionEvent) {
+        resultsViewController.init();
+
     }
 
     public static void applyTransformationData(double temp[]){
